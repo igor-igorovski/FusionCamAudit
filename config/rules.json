@@ -1,0 +1,1865 @@
+{
+  "version": "1.0.0",
+  "profile": "hp_cam_guide_v1_1",
+  "description": "Deterministic CAM audit rules derived from HP CAM Guide for Fusion CAM add-in.",
+  "statuses": [
+    "pass",
+    "fail",
+    "warning",
+    "not_checked"
+  ],
+  "severities": [
+    "info",
+    "warning",
+    "error"
+  ],
+  "categories": [
+    "setup",
+    "tool",
+    "operation",
+    "strategy",
+    "structure",
+    "threading",
+    "engraving",
+    "stock",
+    "fixture",
+    "wcs",
+    "program"
+  ],
+  "rules": [
+    {
+      "code": "DONT_POST_SKIP_AUDIT",
+      "category": "structure",
+      "severity": "info",
+      "appliesTo": "setup",
+      "type": "skip_audit",
+      "when": {
+        "setup.name": [
+          "DON'T POST",
+          "DON\u2019T POST"
+        ]
+      },
+      "message": "DON'T POST setup is excluded from audit.",
+      "guideRefs": [
+        "Remove Excess Stock between ops"
+      ]
+    },
+    {
+      "code": "SETUP_NAME_FORMAT",
+      "category": "setup",
+      "severity": "error",
+      "appliesTo": "setup",
+      "type": "regex",
+      "field": "setup.name",
+      "pattern": "^(Op\\d+\\s+(3AX|4AX|5AX)|Dovetail Stock Prep|SOFT JAWS?|DON[‘’]T POST)$",
+      "message": "Setup name must match 'Op[op#] [#AX]' or an approved support setup name.",
+      "guideRefs": [
+        "Setup Naming Convention",
+        "Expected Setups in CAM file",
+        "Remove Excess Stock between ops"
+      ]
+    },
+    {
+      "code": "PROGRAM_NUMBER_REQUIRED",
+      "category": "program",
+      "severity": "error",
+      "appliesTo": "setup",
+      "type": "required",
+      "field": "setup.programNumber",
+      "message": "Program number is required.",
+      "guideRefs": [
+        "Setup Naming Convention"
+      ]
+    },
+    {
+      "code": "PROGRAM_NUMBER_FORMAT",
+      "category": "program",
+      "severity": "error",
+      "appliesTo": "setup",
+      "type": "regex",
+      "field": "setup.programNumber",
+      "pattern": "^O1\\d{3}$",
+      "message": "Program number must match O1XXX.",
+      "guideRefs": [
+        "Setup Naming Convention"
+      ]
+    },
+    {
+      "code": "PROGRAM_COMMENT_REQUIRED",
+      "category": "program",
+      "severity": "error",
+      "appliesTo": "setup",
+      "type": "required",
+      "field": "setup.programComment",
+      "message": "Program comment is required.",
+      "guideRefs": [
+        "Setup Naming Convention"
+      ]
+    },
+    {
+      "code": "PROGRAM_COMMENT_FORMAT",
+      "category": "program",
+      "severity": "warning",
+      "appliesTo": "setup",
+      "type": "regex",
+      "field": "setup.programComment",
+      "pattern": "^[A-Za-z0-9_\\- ]+\\s+OP\\d+$",
+      "message": "Program comment should end with OP#.",
+      "excludeWhen": {
+        "setup.name": [
+          "SOFT JAW",
+          "SOFT JAWS",
+          "DON'T POST",
+          "DON\u2019T POST"
+        ]
+      },
+      "guideRefs": [
+        "Setup Naming Convention"
+      ]
+    },
+    {
+      "code": "SOFT_JAWS_PROGRAM_COMMENT_FORMAT",
+      "category": "program",
+      "severity": "warning",
+      "appliesTo": "setup",
+      "type": "conditional_regex",
+      "when": {
+        "setup.name": [
+          "SOFT JAW",
+          "SOFT JAWS"
+        ]
+      },
+      "field": "setup.programComment",
+      "pattern": "^[A-Za-z0-9_\\- ]+\\s+SOFT JAWS$",
+      "message": "Soft jaw setup program comment should end with SOFT JAWS.",
+      "guideRefs": [
+        "Expected Setups in CAM file"
+      ]
+    },
+    {
+      "code": "DONT_POST_PROGRAM_COMMENT_FORMAT",
+      "category": "program",
+      "severity": "warning",
+      "appliesTo": "setup",
+      "type": "conditional_regex",
+      "when": {
+        "setup.name": [
+          "DON'T POST",
+          "DON’T POST"
+        ]
+      },
+      "field": "setup.programComment",
+      "pattern": "^[A-Za-z0-9_\\- ]+\\s+DON['’]T POST$",
+      "message": "DON'T POST setup program comment should end with DON'T POST.",
+      "guideRefs": [
+        "Remove Excess Stock between ops"
+      ]
+    },
+    {
+      "code": "AXIS_MODE_REQUIRED",
+      "category": "setup",
+      "severity": "error",
+      "appliesTo": "setup",
+      "type": "required",
+      "field": "setup.axisMode",
+      "message": "Axis mode is required.",
+      "excludeWhen": {
+        "setup.name": [
+          "SOFT JAW",
+          "SOFT JAWS",
+          "Dovetail Stock Prep"
+        ]
+      },
+      "guideRefs": [
+        "Setup Naming Convention"
+      ]
+    },
+    {
+      "code": "MACHINE_MODEL_PRESENT",
+      "category": "setup",
+      "severity": "warning",
+      "appliesTo": "setup",
+      "type": "required",
+      "field": "setup.machineModel",
+      "message": "Machine model should be assigned.",
+      "guideRefs": [
+        "Machine Models and Posts"
+      ]
+    },
+    {
+      "code": "FIXTURE_TYPE_PRESENT",
+      "category": "fixture",
+      "severity": "warning",
+      "appliesTo": "setup",
+      "type": "required",
+      "field": "setup.fixtureType",
+      "message": "Fixture type should be classified.",
+      "guideRefs": [
+        "Fixture and WCS"
+      ]
+    },
+    {
+      "code": "WORK_OFFSET_REQUIRED",
+      "category": "wcs",
+      "severity": "error",
+      "appliesTo": "setup",
+      "type": "required",
+      "field": "setup.workOffset",
+      "message": "Work offset is required.",
+      "guideRefs": [
+        "Fixture and WCS"
+      ]
+    },
+    {
+      "code": "WORK_OFFSET_5AX_TRUNNION",
+      "category": "wcs",
+      "severity": "error",
+      "appliesTo": "setup",
+      "type": "conditional_allowed_values",
+      "when": {
+        "setup.fixtureType": [
+          "5_axis_trunnion"
+        ]
+      },
+      "field": "setup.workOffset",
+      "allowed": [
+        "G59"
+      ],
+      "message": "5-axis trunnion must use G59.",
+      "guideRefs": [
+        "5th Axis WCS"
+      ]
+    },
+    {
+      "code": "WORK_OFFSET_ZERO_POINT_WITH_PROBING",
+      "category": "wcs",
+      "severity": "error",
+      "appliesTo": "setup",
+      "type": "conditional_allowed_values",
+      "when": {
+        "setup.fixtureType": [
+          "zero_point_vise"
+        ],
+        "setup.hasProbeStrategy": [
+          true
+        ]
+      },
+      "field": "setup.workOffset",
+      "allowed": [
+        "G57"
+      ],
+      "message": "Zero-point vise with probing must use G57.",
+      "guideRefs": [
+        "Self Centering Zero Point Vises"
+      ]
+    },
+    {
+      "code": "WORK_OFFSET_ZERO_POINT_NO_PROBING",
+      "category": "wcs",
+      "severity": "error",
+      "appliesTo": "setup",
+      "type": "conditional_allowed_values",
+      "when": {
+        "setup.fixtureType": [
+          "zero_point_vise"
+        ],
+        "setup.hasProbeStrategy": [
+          false
+        ]
+      },
+      "field": "setup.workOffset",
+      "allowed": [
+        "G56"
+      ],
+      "message": "Zero-point vise without probing must use G56.",
+      "guideRefs": [
+        "Self Centering Zero Point Vises"
+      ]
+    },
+    {
+      "code": "WORK_OFFSET_MILLING_VISE_LEFT",
+      "category": "wcs",
+      "severity": "warning",
+      "appliesTo": "setup",
+      "type": "conditional_allowed_values",
+      "when": {
+        "setup.fixtureType": [
+          "milling_vise_left"
+        ]
+      },
+      "field": "setup.workOffset",
+      "allowed": [
+        "G54"
+      ],
+      "message": "Left milling vise should use G54.",
+      "guideRefs": [
+        "Milling Vise"
+      ]
+    },
+    {
+      "code": "WORK_OFFSET_MILLING_VISE_RIGHT",
+      "category": "wcs",
+      "severity": "warning",
+      "appliesTo": "setup",
+      "type": "conditional_allowed_values",
+      "when": {
+        "setup.fixtureType": [
+          "milling_vise_right"
+        ]
+      },
+      "field": "setup.workOffset",
+      "allowed": [
+        "G55"
+      ],
+      "message": "Right milling vise should use G55.",
+      "guideRefs": [
+        "Milling Vise"
+      ]
+    },
+    {
+      "code": "SETUP_CLEARANCE_MIN_MM",
+      "category": "setup",
+      "severity": "warning",
+      "appliesTo": "setup",
+      "type": "min_numeric",
+      "field": "setup.clearanceMm",
+      "min": 4.0,
+      "message": "Axial/radial clearance should be greater than 4 mm.",
+      "guideRefs": [
+        "Setup and Workholding"
+      ]
+    },
+    {
+      "code": "EXPECTED_SETUP_OP1_PRESENT",
+      "category": "structure",
+      "severity": "warning",
+      "appliesTo": "file",
+      "type": "required_item",
+      "field": "file.setupNames",
+      "requiredItem": "Op1",
+      "matchMode": "starts_with",
+      "message": "Op1 setup should be present.",
+      "guideRefs": [
+        "Expected Setups in CAM file"
+      ]
+    },
+    {
+      "code": "EXPECTED_SETUP_OP2_WHEN_MULTIPLE_SETUPS",
+      "category": "structure",
+      "severity": "warning",
+      "appliesTo": "file",
+      "type": "conditional_required_item",
+      "when": {
+        "file.setupCountMin": 2
+      },
+      "field": "file.setupNames",
+      "requiredItem": "Op2",
+      "matchMode": "starts_with",
+      "message": "Op2 should be present when the file contains multiple main setups.",
+      "guideRefs": [
+        "Expected Setups in CAM file"
+      ]
+    },
+    {
+      "code": "DOVETAIL_STOCK_PREP_NAMING",
+      "category": "structure",
+      "severity": "warning",
+      "appliesTo": "setup",
+      "type": "regex_optional",
+      "field": "setup.name",
+      "pattern": "^Dovetail Stock Prep$",
+      "message": "Use 'Dovetail Stock Prep' naming when applicable.",
+      "guideRefs": [
+        "Expected Setups in CAM file"
+      ]
+    },
+    {
+      "code": "SOFT_JAW_SETUP_NAMING",
+      "category": "structure",
+      "severity": "warning",
+      "appliesTo": "setup",
+      "type": "regex_optional",
+      "field": "setup.name",
+      "pattern": "^Soft jaws?$",
+      "message": "Use 'Soft jaw' or 'Soft jaws' naming when applicable.",
+      "guideRefs": [
+        "Expected Setups in CAM file"
+      ]
+    },
+    {
+      "code": "DONT_POST_SETUP_NAMING",
+      "category": "structure",
+      "severity": "warning",
+      "appliesTo": "setup",
+      "type": "regex_optional",
+      "field": "setup.name",
+      "pattern": "^DON['’]T POST$",
+      "message": "Use 'DON'T POST' naming for the remove excess stock setup.",
+      "guideRefs": [
+        "Remove Excess Stock between ops"
+      ]
+    },
+    {
+      "code": "TOOL_COUNT_MAX",
+      "category": "tool",
+      "severity": "warning",
+      "appliesTo": "file",
+      "type": "max_numeric",
+      "field": "file.toolCount",
+      "max": 19,
+      "message": "Try to limit total tools to fewer than 20.",
+      "guideRefs": [
+        "Number of available tools"
+      ]
+    },
+    {
+      "code": "TOOL_REQUIRED",
+      "category": "tool",
+      "severity": "error",
+      "appliesTo": "operation",
+      "type": "required",
+      "field": "operation.tool.number",
+      "message": "Operation must have a tool assigned.",
+      "guideRefs": [
+        "Standardized Tools"
+      ]
+    },
+    {
+      "code": "TOOL_NUMBER_REQUIRED",
+      "category": "tool",
+      "severity": "error",
+      "appliesTo": "operation",
+      "type": "required",
+      "field": "operation.tool.number",
+      "message": "Tool number is required.",
+      "guideRefs": [
+        "Standardized Tools"
+      ]
+    },
+    {
+      "code": "TOOL_DESCRIPTION_REQUIRED",
+      "category": "tool",
+      "severity": "error",
+      "appliesTo": "operation",
+      "type": "required",
+      "field": "operation.tool.description",
+      "message": "Tool description is required.",
+      "guideRefs": [
+        "Making Changes to tools"
+      ]
+    },
+    {
+      "code": "TOOL_TYPE_REQUIRED",
+      "category": "tool",
+      "severity": "error",
+      "appliesTo": "operation",
+      "type": "required",
+      "field": "operation.tool.type",
+      "message": "Tool type is required.",
+      "guideRefs": [
+        "Standardized Tools"
+      ]
+    },
+    {
+      "code": "TOOL_PRESET_REQUIRED",
+      "category": "tool",
+      "severity": "error",
+      "appliesTo": "operation",
+      "type": "required",
+      "field": "operation.tool.preset",
+      "message": "Tool preset is required.",
+      "guideRefs": [
+        "Cutting Parameters"
+      ]
+    },
+    {
+      "code": "TOOL_HOLDER_REQUIRED",
+      "category": "tool",
+      "severity": "warning",
+      "appliesTo": "operation",
+      "type": "required",
+      "field": "operation.tool.holder",
+      "message": "Holder should be assigned.",
+      "guideRefs": [
+        "Holders"
+      ]
+    },
+    {
+      "code": "TOOLPATH_EXISTS",
+      "category": "operation",
+      "severity": "error",
+      "appliesTo": "operation",
+      "type": "equals",
+      "field": "operation.hasToolpath",
+      "expected": true,
+      "message": "Toolpath must exist.",
+      "guideRefs": [
+        "General CAM process"
+      ]
+    },
+    {
+      "code": "CYCLE_TIME_PRESENT",
+      "category": "operation",
+      "severity": "warning",
+      "appliesTo": "operation",
+      "type": "required",
+      "field": "operation.cycleTimeSec",
+      "message": "Cycle time should be available.",
+      "guideRefs": [
+        "Cycle time reporting"
+      ]
+    },
+    {
+      "code": "OPERATION_NAME_REQUIRED",
+      "category": "operation",
+      "severity": "error",
+      "appliesTo": "operation",
+      "type": "required",
+      "field": "operation.name",
+      "message": "Operation name is required.",
+      "guideRefs": [
+        "Feature Tree and Labeling"
+      ]
+    },
+    {
+      "code": "OPERATION_COMMENT_REQUIRED",
+      "category": "operation",
+      "severity": "warning",
+      "appliesTo": "operation",
+      "type": "required",
+      "field": "operation.comment",
+      "message": "Operation comment should be present.",
+      "guideRefs": [
+        "Making Changes to tools"
+      ]
+    },
+    {
+      "code": "COMPENSATION_REQUIRED",
+      "category": "operation",
+      "severity": "warning",
+      "appliesTo": "operation",
+      "type": "conditional_required",
+      "when": {
+        "operation.operationType": [
+          "contour2d",
+          "bore",
+          "circular",
+          "thread",
+          "chamfer2d",
+          "pocket2d"
+        ]
+      },
+      "field": "operation.compensationType",
+      "message": "Compensation type should be defined.",
+      "guideRefs": [
+        "CAM programming consistency"
+      ]
+    },
+    {
+      "code": "STANDARD_TOOL_PREFIX_REQUIRED",
+      "category": "tool",
+      "severity": "warning",
+      "appliesTo": "operation",
+      "type": "conditional_regex",
+      "when": {
+        "operation.tool.isStandard": [
+          true
+        ]
+      },
+      "field": "operation.tool.description",
+      "pattern": "^\\.S\\s?.+",
+      "message": "Standard tool descriptions should keep the .S prefix.",
+      "guideRefs": [
+        "Making Changes to tools"
+      ]
+    },
+    {
+      "code": "ONE_OFF_TOOL_PREFIX_REMOVED",
+      "category": "tool",
+      "severity": "warning",
+      "appliesTo": "operation",
+      "type": "conditional_not_regex",
+      "when": {
+        "operation.tool.isOneOff": [
+          true
+        ]
+      },
+      "field": "operation.tool.description",
+      "pattern": "^\\.S\\s?.+",
+      "message": "One-off modified tools should remove the .S prefix.",
+      "guideRefs": [
+        "Making Changes to tools"
+      ]
+    },
+    {
+      "code": "ONE_OFF_TOOL_NUMBER_RANGE",
+      "category": "tool",
+      "severity": "warning",
+      "appliesTo": "operation",
+      "type": "conditional_regex",
+      "when": {
+        "operation.tool.isOneOff": [
+          true
+        ]
+      },
+      "field": "operation.tool.number",
+      "pattern": "^T99[0-9]$",
+      "message": "One-off modified tools should be renumbered T999/T998/T997 etc.",
+      "guideRefs": [
+        "Making Changes to tools"
+      ]
+    },
+    {
+      "code": "TOOL_NUMBER_MATCHES_PREFIX",
+      "category": "tool",
+      "severity": "error",
+      "appliesTo": "operation",
+      "type": "conditional_equals",
+      "when": { "operation.tool.hasSPrefix": [true] },
+      "field": "operation.tool.toolNumberMatchesPrefix",
+      "expected": true,
+      "message": "Tool number must match the .S prefix number (e.g. .S101 → T101)."
+    },
+    {
+      "code": "MODIFIED_TOOL_RESERVED_NUMBER",
+      "category": "tool",
+      "severity": "error",
+      "appliesTo": "operation",
+      "type": "conditional_equals",
+      "when": { "operation.tool.hasSPrefix": [false] },
+      "field": "operation.tool.inReservedRange",
+      "expected": true,
+      "message": "Tools without .S prefix must use a reserved number T900–T999."
+    },
+    {
+      "code": "TOOL_NOTE_FOR_ONE_OFF_REQUIRED",
+      "category": "tool",
+      "severity": "warning",
+      "appliesTo": "operation",
+      "type": "conditional_required",
+      "when": {
+        "operation.tool.isOneOff": [
+          true
+        ]
+      },
+      "field": "operation.comment",
+      "message": "First toolpath using a one-off tool should contain a note.",
+      "guideRefs": [
+        "Making Changes to tools"
+      ]
+    },
+    {
+      "code": "HOLDER_SMALL_TOOL_PREF_GSK06",
+      "category": "tool",
+      "severity": "warning",
+      "appliesTo": "operation",
+      "type": "conditional_allowed_values",
+      "when": {
+        "operation.tool.diameterMaxMm": 6.0
+      },
+      "field": "operation.tool.holder",
+      "allowed": [
+        "GSK06"
+      ],
+      "message": "Tools smaller than 6 mm should prefer GSK06.",
+      "guideRefs": [
+        "Holders"
+      ]
+    },
+    {
+      "code": "HOLDER_STANDARD_ONLY_DC",
+      "category": "tool",
+      "severity": "warning",
+      "appliesTo": "operation",
+      "type": "conditional_allowed_values",
+      "when": {
+        "operation.tool.isStandard": [
+          true
+        ],
+        "operation.tool.holderFamily": [
+          "DC04",
+          "DC06",
+          "DC08"
+        ]
+      },
+      "field": "operation.tool.holderFamily",
+      "allowed": [
+        "DC04",
+        "DC06",
+        "DC08"
+      ],
+      "message": "DC holders are only for standard tools.",
+      "guideRefs": [
+        "Holders"
+      ]
+    },
+    {
+      "code": "HOLDER_STANDARD_ONLY_SHRINK",
+      "category": "tool",
+      "severity": "warning",
+      "appliesTo": "operation",
+      "type": "conditional_allowed_values",
+      "when": {
+        "operation.tool.isStandard": [
+          true
+        ],
+        "operation.tool.holderFamily": [
+          "SHRINK_FIT"
+        ]
+      },
+      "field": "operation.tool.holderFamily",
+      "allowed": [
+        "SHRINK_FIT"
+      ],
+      "message": "Shrink fit is only for standard tools.",
+      "guideRefs": [
+        "Holders"
+      ]
+    },
+    {
+      "code": "ER16_ER25_ONLY_FOR_LARGER_TOOLS",
+      "category": "tool",
+      "severity": "warning",
+      "appliesTo": "operation",
+      "type": "allowed_values",
+      "field": "operation.tool.holderFamily",
+      "allowed": [
+        "GSK06",
+        "DC04",
+        "DC06",
+        "DC08",
+        "ER16",
+        "ER25",
+        "SHRINK_FIT"
+      ],
+      "message": "Holder family should be one of the approved HP holders.",
+      "guideRefs": [
+        "Holders"
+      ]
+    },
+    {
+      "code": "FLAT_EM_FINISH_WALL_PRESET_FOR_CONTOUR",
+      "category": "strategy",
+      "severity": "warning",
+      "appliesTo": "operation",
+      "type": "conditional_allowed_values",
+      "when": {
+        "operation.tool.type": [
+          "Flat End Mill"
+        ],
+        "operation.type": [
+          "2D Contour",
+          "2D Bore",
+          "3D Contour"
+        ]
+      },
+      "field": "operation.tool.preset",
+      "allowed": [
+        "FINISH WALL"
+      ],
+      "message": "Use FINISH WALL for 2D contours, 2D bores, and 3D contours.",
+      "guideRefs": [
+        "Flat End Mills"
+      ]
+    },
+    {
+      "code": "FLAT_EM_FINISH_FLOOR_PRESET",
+      "category": "strategy",
+      "severity": "warning",
+      "appliesTo": "operation",
+      "type": "conditional_allowed_values",
+      "when": {
+        "operation.tool.type": [
+          "Flat End Mill"
+        ],
+        "operation.type": [
+          "3D Flat",
+          "Face",
+          "2D Contour Floor"
+        ]
+      },
+      "field": "operation.tool.preset",
+      "allowed": [
+        "FINISH FLOOR"
+      ],
+      "message": "Use FINISH FLOOR for floor finish toolpaths.",
+      "guideRefs": [
+        "Flat End Mills"
+      ]
+    },
+    {
+      "code": "HSM_ONLY_FOR_ROUGHING",
+      "category": "strategy",
+      "severity": "warning",
+      "appliesTo": "operation",
+      "type": "conditional_not_strategy_group",
+      "when": {
+        "operation.tool.presetContains": [
+          "HSM"
+        ]
+      },
+      "field": "operation.strategyGroup",
+      "disallowed": [
+        "finishing"
+      ],
+      "message": "HSM presets should be used for roughing only.",
+      "guideRefs": [
+        "Flat End Mills"
+      ]
+    },
+    {
+      "code": "SLOT_PRESET_WARNING",
+      "category": "strategy",
+      "severity": "warning",
+      "appliesTo": "operation",
+      "type": "conditional_contains",
+      "when": {
+        "operation.tool.presetContains": [
+          "SLOT"
+        ]
+      },
+      "field": "operation.tool.preset",
+      "expectedContains": "SLOT",
+      "message": "Use SLOT sparingly.",
+      "guideRefs": [
+        "Flat End Mills"
+      ]
+    },
+    {
+      "code": "BALL_EM_PROFILING_FOR_LOW_STOCK",
+      "category": "strategy",
+      "severity": "warning",
+      "appliesTo": "operation",
+      "type": "conditional_required",
+      "when": {
+        "operation.tool.type": [
+          "Ball End Mill"
+        ],
+        "operation.strategyGroup": [
+          "3d_finishing"
+        ]
+      },
+      "field": "operation.tool.preset",
+      "message": "Ball end mills should use the Profiling preset for 3D surfacing with <1 mm stock remaining.",
+      "guideRefs": [
+        "Ball End Mills"
+      ]
+    },
+    {
+      "code": "BALL_EM_DEBURR_PRESET",
+      "category": "strategy",
+      "severity": "warning",
+      "appliesTo": "operation",
+      "type": "conditional_allowed_values",
+      "when": {
+        "operation.tool.type": [
+          "Ball End Mill"
+        ],
+        "operation.strategyGroup": [
+          "deburr"
+        ]
+      },
+      "field": "operation.tool.preset",
+      "allowed": [
+        "Deburring"
+      ],
+      "message": "Ball end mills used for edge deburring should use the Deburring preset.",
+      "guideRefs": [
+        "Ball End Mills"
+      ]
+    },
+    {
+      "code": "DRILL_PECKING_POLICY_PRESENT",
+      "category": "strategy",
+      "severity": "warning",
+      "appliesTo": "operation",
+      "type": "conditional_required",
+      "when": {
+        "operation.tool.type": [
+          "Drill"
+        ]
+      },
+      "field": "operation.drill.peckMode",
+      "message": "Drill operations should define pecking mode according to depth-to-diameter rules.",
+      "guideRefs": [
+        "Drills"
+      ]
+    },
+    {
+      "code": "THREAD_MILLING_PREFERRED",
+      "category": "threading",
+      "severity": "warning",
+      "appliesTo": "operation",
+      "type": "conditional_preferred",
+      "when": {
+        "operation.strategyGroup": [
+          "threading"
+        ]
+      },
+      "field": "operation.thread.method",
+      "preferred": [
+        "thread_mill"
+      ],
+      "message": "Thread milling is the preferred method for thread generation.",
+      "guideRefs": [
+        "Threading"
+      ]
+    },
+    {
+      "code": "PLUNGE_THREAD_MILL_PREFERRED",
+      "category": "threading",
+      "severity": "warning",
+      "appliesTo": "operation",
+      "type": "conditional_preferred",
+      "when": {
+        "operation.strategyGroup": [
+          "threading"
+        ],
+        "operation.materialGroup": [
+          "aluminum"
+        ]
+      },
+      "field": "operation.thread.mode",
+      "preferred": [
+        "plunge"
+      ],
+      "message": "In aluminum, prefer plunge thread milling.",
+      "guideRefs": [
+        "Threading"
+      ]
+    },
+    {
+      "code": "CHAMFER_BEFORE_THREAD_SEQUENCE",
+      "category": "threading",
+      "severity": "error",
+      "appliesTo": "operation",
+      "type": "sequence_predecessor_required",
+      "field": "operation.sequence",
+      "predecessorStrategyGroups": [
+        "chamfer"
+      ],
+      "targetStrategyGroups": [
+        "threading"
+      ],
+      "message": "Chamfer threaded holes before thread milling.",
+      "guideRefs": [
+        "Threading",
+        "Threads and Thread Chamfers"
+      ]
+    },
+    {
+      "code": "ANO_OFFSET_THREADPATH_FOR_ANO_SHIFT",
+      "category": "threading",
+      "severity": "warning",
+      "appliesTo": "operation",
+      "type": "conditional_contains",
+      "when": {
+        "file.hasAnoShiftModel": [
+          true
+        ],
+        "operation.strategyGroup": [
+          "threading"
+        ]
+      },
+      "field": "operation.name",
+      "expectedContains": "Ano Offset",
+      "message": "Ano-shifted parts should use [Ano Offset] thread toolpaths.",
+      "guideRefs": [
+        "Ano Offset"
+      ]
+    },
+    {
+      "code": "DEBURR_EXTERNAL_EDGES_PRESENT",
+      "category": "strategy",
+      "severity": "warning",
+      "appliesTo": "file",
+      "type": "required_strategy_group",
+      "field": "file.strategyGroups",
+      "requiredItem": "deburr",
+      "message": "External edges should be deburred.",
+      "guideRefs": [
+        "Deburring"
+      ]
+    },
+    {
+      "code": "DEBURR_TARGET_CHAMFER_PRESENT",
+      "category": "strategy",
+      "severity": "warning",
+      "appliesTo": "operation",
+      "type": "conditional_required",
+      "when": {
+        "operation.strategyGroup": [
+          "deburr"
+        ]
+      },
+      "field": "operation.deburr.targetChamferMm",
+      "message": "Deburring should target approximately 0.125 mm chamfer size.",
+      "guideRefs": [
+        "Deburring"
+      ]
+    },
+    {
+      "code": "TAB_WEB_THICKNESS_PRESENT",
+      "category": "structure",
+      "severity": "warning",
+      "appliesTo": "operation",
+      "type": "conditional_required",
+      "when": {
+        "operation.strategyGroup": [
+          "tabbing"
+        ]
+      },
+      "field": "operation.tab.webThicknessMm",
+      "message": "Tab/web thickness should be defined.",
+      "guideRefs": [
+        "Tabbing",
+        "Setup and Workholding"
+      ]
+    },
+    {
+      "code": "REMOVE_EXTRA_STOCK_DONT_POST_SETUP",
+      "category": "structure",
+      "severity": "warning",
+      "appliesTo": "file",
+      "type": "conditional_required_item",
+      "when": {
+        "file.hasRemoveExtraStockProcess": [
+          true
+        ]
+      },
+      "field": "file.setupNames",
+      "requiredItem": "DON\u2019T POST",
+      "matchMode": "contains",
+      "message": "Use a DON\u2019T POST setup for the remove excess stock process.",
+      "guideRefs": [
+        "Remove Excess Stock between ops"
+      ]
+    },
+    {
+      "code": "BROWSER_FOLDER_REQUIRED_OVER_50_OPS",
+      "category": "structure",
+      "severity": "warning",
+      "appliesTo": "file",
+      "type": "conditional_min_count_required",
+      "when": {
+        "file.operationCountMin": 51
+      },
+      "field": "file.folderCount",
+      "min": 1,
+      "message": "Programs with more than 50 toolpaths should use folders to keep the browser clean.",
+      "guideRefs": [
+        "Toolpath Strategies and Programming Practices"
+      ]
+    },
+    {
+      "code": "COMPONENTS_AND_SKETCHES_LABELED",
+      "category": "structure",
+      "severity": "warning",
+      "appliesTo": "file",
+      "type": "required",
+      "field": "file.allComponentsLabeled",
+      "message": "All components and sketches should be labeled.",
+      "guideRefs": [
+        "Feature Tree and Labeling"
+      ]
+    },
+    {
+      "code": "ENGRAVE_FONT_ISO_SHX",
+      "category": "engraving",
+      "severity": "warning",
+      "appliesTo": "operation",
+      "type": "conditional_allowed_values",
+      "when": {
+        "operation.strategyGroup": [
+          "engraving"
+        ]
+      },
+      "field": "operation.engrave.font",
+      "allowed": [
+        "ISO.shx"
+      ],
+      "message": "Engraving should use ISO.shx font.",
+      "guideRefs": [
+        "Engraving"
+      ]
+    },
+    {
+      "code": "ENGRAVE_HEIGHT_MIN",
+      "category": "engraving",
+      "severity": "warning",
+      "appliesTo": "operation",
+      "type": "conditional_min_numeric",
+      "when": {
+        "operation.strategyGroup": [
+          "engraving"
+        ]
+      },
+      "field": "operation.engrave.heightMm",
+      "min": 1.0,
+      "message": "Engraving height should be at least 1 mm.",
+      "guideRefs": [
+        "Engraving"
+      ]
+    },
+    {
+      "code": "ENGRAVE_HEIGHT_TARGET",
+      "category": "engraving",
+      "severity": "info",
+      "appliesTo": "operation",
+      "type": "conditional_target_numeric",
+      "when": {
+        "operation.strategyGroup": [
+          "engraving"
+        ]
+      },
+      "field": "operation.engrave.heightMm",
+      "target": 3.0,
+      "message": "Target engraving height is 3 mm.",
+      "guideRefs": [
+        "Engraving"
+      ]
+    },
+    {
+      "code": "ENGRAVE_DEPTH_TARGET_IN",
+      "category": "engraving",
+      "severity": "info",
+      "appliesTo": "operation",
+      "type": "conditional_target_numeric",
+      "when": {
+        "operation.strategyGroup": [
+          "engraving"
+        ]
+      },
+      "field": "operation.engrave.depthIn",
+      "target": 0.0035,
+      "message": "Target engraving depth is 0.0035 in.",
+      "guideRefs": [
+        "Engraving"
+      ]
+    },
+    {
+      "code": "STOCK_BAR_ALLOWANCE_IN",
+      "category": "stock",
+      "severity": "warning",
+      "appliesTo": "setup",
+      "type": "target_numeric",
+      "field": "setup.stock.barAllowanceIn",
+      "target": 0.05,
+      "message": "Stock sizing should use 0.05 in to bar dimensions.",
+      "guideRefs": [
+        "Stock Sizing"
+      ]
+    },
+    {
+      "code": "STOCK_CUT_ALLOWANCE_PER_SIDE_IN",
+      "category": "stock",
+      "severity": "warning",
+      "appliesTo": "setup",
+      "type": "target_numeric",
+      "field": "setup.stock.cutAllowancePerSideIn",
+      "target": 0.1,
+      "message": "Stock sizing should use 0.1 in per side to cut dimensions.",
+      "guideRefs": [
+        "Stock Sizing"
+      ]
+    },
+    {
+      "code": "ADAPTIVE_ROUGH_PRIMARY",
+      "category": "strategy",
+      "severity": "info",
+      "appliesTo": "file",
+      "type": "preferred_strategy_group",
+      "field": "file.strategyGroups",
+      "preferred": [
+        "adaptive_rough"
+      ],
+      "message": "Adaptive rough should be the primary roughing method.",
+      "guideRefs": [
+        "Roughing"
+      ]
+    },
+    {
+      "code": "FACE_NOT_FOR_ROUGHING",
+      "category": "strategy",
+      "severity": "warning",
+      "appliesTo": "operation",
+      "type": "conditional_not_strategy_group",
+      "when": {
+        "operation.type": [
+          "Face"
+        ]
+      },
+      "field": "operation.strategyGroup",
+      "disallowed": [
+        "roughing"
+      ],
+      "message": "Do not use Face to rough material; use it only to finish the face.",
+      "guideRefs": [
+        "Roughing"
+      ]
+    },
+    {
+      "code": "ADAPTIVE_NOT_FOR_FINISH",
+      "category": "strategy",
+      "severity": "error",
+      "appliesTo": "operation",
+      "type": "conditional_not_contains",
+      "when": {
+        "operation.type": [
+          "Adaptive",
+          "3D Adaptive",
+          "2D Adaptive"
+        ]
+      },
+      "field": "operation.strategyGroup",
+      "disallowed": [
+        "finishing"
+      ],
+      "message": "Never finish a surface with an adaptive toolpath.",
+      "guideRefs": [
+        "Roughing"
+      ]
+    },
+    {
+      "code": "ROUGH_ENTRY_RAMP_ANGLE_TARGET",
+      "category": "strategy",
+      "severity": "info",
+      "appliesTo": "operation",
+      "type": "conditional_target_numeric",
+      "when": {
+        "operation.strategyGroup": [
+          "roughing"
+        ]
+      },
+      "field": "operation.ramp.entryAngleDeg",
+      "target": 3.5,
+      "message": "Use 3.5\u00b0 entry ramps for roughing.",
+      "guideRefs": [
+        "Roughing"
+      ]
+    },
+    {
+      "code": "ROUGH_RAMP_TAPER_ANGLE_TARGET",
+      "category": "strategy",
+      "severity": "info",
+      "appliesTo": "operation",
+      "type": "conditional_target_numeric",
+      "when": {
+        "operation.strategyGroup": [
+          "roughing"
+        ]
+      },
+      "field": "operation.ramp.taperAngleDeg",
+      "target": 4.0,
+      "message": "Use 4\u00b0 ramp taper angles for roughing.",
+      "guideRefs": [
+        "Roughing"
+      ]
+    },
+    {
+      "code": "PROTECT_LONG_GEN_ROUGHING",
+      "category": "strategy",
+      "severity": "info",
+      "appliesTo": "operation",
+      "type": "conditional_preferred",
+      "when": {
+        "operation.strategyGroup": [
+          "roughing"
+        ],
+        "operation.generateTimeLong": [
+          true
+        ]
+      },
+      "field": "operation.protectEnabled",
+      "preferred": [
+        true
+      ],
+      "message": "Use Protect on roughing toolpaths that take a long time to generate.",
+      "guideRefs": [
+        "Roughing"
+      ]
+    },
+    {
+      "code": "HALF_INCH_ENDMILL_NOT_FOR_ROUGHING",
+      "category": "strategy",
+      "severity": "warning",
+      "appliesTo": "operation",
+      "type": "conditional_not_allowed",
+      "when": {
+        "operation.strategyGroup": [
+          "roughing"
+        ]
+      },
+      "field": "operation.tool.diameterIn",
+      "disallowed": [
+        0.5
+      ],
+      "message": "Never rough with 1/2 in end mills on BT30 holders.",
+      "guideRefs": [
+        "Roughing"
+      ]
+    },
+    {
+      "code": "PREDRILL_LARGE_HOLES_BEFORE_2D_BORE",
+      "category": "strategy",
+      "severity": "warning",
+      "appliesTo": "operation",
+      "type": "sequence_predecessor_required",
+      "field": "operation.sequence",
+      "when": {
+        "operation.type": [
+          "2D Bore"
+        ],
+        "operation.holeDiameterMmMin": 10.0
+      },
+      "predecessorStrategyGroups": [
+        "drilling"
+      ],
+      "targetStrategyGroups": [
+        "boring"
+      ],
+      "message": "Pre-drill holes 10 mm and up before finishing with 2D Bore.",
+      "guideRefs": [
+        "Roughing"
+      ]
+    },
+    {
+      "code": "BORE_RAMP_ANGLE_STANDARD",
+      "category": "strategy",
+      "severity": "info",
+      "appliesTo": "operation",
+      "type": "conditional_target_numeric",
+      "when": {
+        "operation.type": [
+          "2D Bore",
+          "Ramp"
+        ]
+      },
+      "field": "operation.ramp.entryAngleDeg",
+      "target": 3.5,
+      "message": "3.5\u00b0 ramps are standard for bore and ramp toolpaths.",
+      "guideRefs": [
+        "Finishing"
+      ]
+    },
+    {
+      "code": "HOLE_FINISH_ALLOWANCE_OR_SPRING_PASS",
+      "category": "strategy",
+      "severity": "warning",
+      "appliesTo": "operation",
+      "type": "conditional_required",
+      "when": {
+        "operation.type": [
+          "2D Bore"
+        ]
+      },
+      "field": "operation.finishMode",
+      "message": "Use either 0.1 mm wall stock for finish pass or cut to size with a spring pass.",
+      "guideRefs": [
+        "Holes, Drilling, Spotting, Chamfers, Countersinks/Counterbores"
+      ]
+    },
+    {
+      "code": "SPOT_DRILL_SMALL_HOLES_WITH_CHAMFER_TOOL",
+      "category": "strategy",
+      "severity": "info",
+      "appliesTo": "operation",
+      "type": "conditional_preferred",
+      "when": {
+        "operation.holeDiameterInMax": 0.125,
+        "operation.strategyGroup": [
+          "spotting"
+        ]
+      },
+      "field": "operation.tool.description",
+      "preferredContains": "1/8 chamfer",
+      "message": "Spot drill holes 0.125 in or less with the 1/8 chamfer tool.",
+      "guideRefs": [
+        "Holes, Drilling, Spotting, Chamfers, Countersinks/Counterbores"
+      ]
+    },
+    {
+      "code": "SPOT_DRILL_LARGER_HOLES_WITH_QUARTER_SPOT",
+      "category": "strategy",
+      "severity": "info",
+      "appliesTo": "operation",
+      "type": "conditional_preferred",
+      "when": {
+        "operation.holeDiameterInMin": 0.1251,
+        "operation.strategyGroup": [
+          "spotting"
+        ]
+      },
+      "field": "operation.tool.description",
+      "preferredContains": "1/4 spot",
+      "message": "Larger holes should be spotted with a 1/4 spot drill.",
+      "guideRefs": [
+        "Holes, Drilling, Spotting, Chamfers, Countersinks/Counterbores"
+      ]
+    },
+    {
+      "code": "DRILL_TOOLPATH_LABEL_SIZE",
+      "category": "operation",
+      "severity": "warning",
+      "appliesTo": "operation",
+      "type": "conditional_contains",
+      "when": {
+        "operation.tool.type": [
+          "Drill"
+        ]
+      },
+      "field": "operation.name",
+      "expectedContains": "DRILL",
+      "message": "Drill toolpaths should be labeled with the drill size.",
+      "guideRefs": [
+        "Holes, Drilling, Spotting, Chamfers, Countersinks/Counterbores"
+      ]
+    },
+    {
+      "code": "BLIND_DRILL_DEPTH_REVIEW",
+      "category": "strategy",
+      "severity": "warning",
+      "appliesTo": "operation",
+      "type": "conditional_required",
+      "when": {
+        "operation.tool.type": [
+          "Drill"
+        ],
+        "operation.hole.isBlind": [
+          true
+        ]
+      },
+      "field": "operation.depth.reviewed",
+      "message": "Blind drill and blind tap depth should be checked carefully.",
+      "guideRefs": [
+        "Holes, Drilling, Spotting, Chamfers, Countersinks/Counterbores"
+      ]
+    },
+    {
+      "code": "DRILL_MEASUREMENT_SYSTEM_PREFERENCE",
+      "category": "tool",
+      "severity": "info",
+      "appliesTo": "operation",
+      "type": "conditional_preferred_order",
+      "when": {
+        "operation.tool.type": [
+          "Drill"
+        ]
+      },
+      "field": "operation.tool.measurementSystem",
+      "preferredOrder": [
+        "circuit_board",
+        "metric",
+        "fractional",
+        "letter",
+        "wire"
+      ],
+      "message": "Preferred drill measurement systems: circuit board, metric, fractional, letter, wire.",
+      "guideRefs": [
+        "Holes, Drilling, Spotting, Chamfers, Countersinks/Counterbores"
+      ]
+    },
+    {
+      "code": "THREAD_CHAMFER_LARGER_THAN_MAJOR_DIA",
+      "category": "threading",
+      "severity": "warning",
+      "appliesTo": "operation",
+      "type": "conditional_required",
+      "when": {
+        "operation.strategyGroup": [
+          "threading"
+        ]
+      },
+      "field": "operation.thread.chamferMajorDiaClearance",
+      "message": "Thread chamfers should be larger than the major diameter.",
+      "guideRefs": [
+        "Threads and Thread Chamfers"
+      ]
+    },
+    {
+      "code": "COPY_TOOLPATH_UPDATE_TO_STANDARD_TOOLS",
+      "category": "tool",
+      "severity": "warning",
+      "appliesTo": "operation",
+      "type": "conditional_required",
+      "when": {
+        "operation.copiedFromOtherPart": [
+          true
+        ]
+      },
+      "field": "operation.tool.matchesStandardModel",
+      "message": "When copying toolpaths from another part, update tools to current standard tools.",
+      "guideRefs": [
+        "Toolpath Strategies and Programming Practices"
+      ]
+    },
+    {
+      "code": "CHASE_RIGIDITY_RULE",
+      "category": "strategy",
+      "severity": "info",
+      "appliesTo": "file",
+      "type": "preferred",
+      "field": "file.processNote",
+      "preferred": "Leave as much material holding onto the part as possible for as long as possible.",
+      "message": "Chase rigidity by leaving support material as long as possible.",
+      "guideRefs": [
+        "Toolpath Strategies and Programming Practices"
+      ]
+    },
+    {
+      "code": "REDUCE_BC_ROTATIONS",
+      "category": "strategy",
+      "severity": "info",
+      "appliesTo": "file",
+      "type": "preferred",
+      "field": "file.optimizationGoal",
+      "preferred": "reduce_BC_rotations",
+      "message": "Reduce the number of B and C axis rotations to lower cycle time.",
+      "guideRefs": [
+        "Toolpath Strategies and Programming Practices"
+      ]
+    },
+    {
+      "code": "NO_SHANK_RUBBING",
+      "category": "strategy",
+      "severity": "error",
+      "appliesTo": "operation",
+      "type": "conditional_equals",
+      "field": "operation.tool.shankRubbingRisk",
+      "expected": false,
+      "message": "Never rub the shank of a tool on material.",
+      "guideRefs": [
+        "Toolpath Strategies and Programming Practices"
+      ]
+    },
+    {
+      "code": "AVOID_LONG_STICKOUT_FOR_ROUGHING",
+      "category": "strategy",
+      "severity": "warning",
+      "appliesTo": "operation",
+      "type": "conditional_equals",
+      "when": {
+        "operation.strategyGroup": [
+          "roughing"
+        ]
+      },
+      "field": "operation.tool.longStickoutReducedShank",
+      "expected": false,
+      "message": "Avoid long stickout reduced-shank tools for roughing.",
+      "guideRefs": [
+        "Toolpath Strategies and Programming Practices"
+      ]
+    },
+    {
+      "code": "CYCLE_REPEAT_PASS_FLOOR_FINISH",
+      "category": "cycle",
+      "severity": "warning",
+      "appliesTo": "operation",
+      "type": "conditional_equals",
+      "when": { "operation.name": { "containsAll": ["FINISH", "FLOOR"] } },
+      "field": "operation.nullPass",
+      "expected": false,
+      "message": "Floor finish operations must not use 'Repeat finishing pass' (nullPass must be false)."
+    },
+    {
+      "code": "NULL_PASS_WALL_FINISH_REQUIRED",
+      "category": "cycle",
+      "severity": "warning",
+      "appliesTo": "operation",
+      "type": "conditional_equals",
+      "when": { "operation.name": { "containsAll": ["FINISH", "WALL"] } },
+      "field": "operation.nullPass",
+      "expected": true,
+      "message": "Wall finish operations must use 'Repeat finishing pass' (nullPass must be true)."
+    },
+    {
+      "code": "MULTIPLE_FINISHING_PASSES_WALL_FINISH",
+      "category": "cycle",
+      "severity": "warning",
+      "appliesTo": "operation",
+      "type": "conditional_equals",
+      "when": { "operation.name": { "containsAll": ["FINISH", "WALL"] } },
+      "field": "operation.doMultipleFinishingPasses",
+      "expected": false,
+      "message": "Wall finish operations should not use 'Multiple finishing passes' (doMultipleFinishingPasses should be false)."
+    },
+    {
+      "code": "USE_SAME_TOOL_ALL_FACES_BEFORE_CHANGE",
+      "category": "strategy",
+      "severity": "info",
+      "appliesTo": "file",
+      "type": "preferred",
+      "field": "file.toolChangeStrategy",
+      "preferred": "same_tool_all_faces_first",
+      "message": "Use the same tool on all faces of a part before changing tools where practical.",
+      "guideRefs": [
+        "Machine Kinematics and Axis Usage"
+      ]
+    },
+    {
+      "code": "FOUR_AXIS_SIMULTANEOUS_MAX",
+      "category": "setup",
+      "severity": "error",
+      "appliesTo": "setup",
+      "type": "max_numeric",
+      "field": "setup.simultaneousAxes",
+      "max": 4,
+      "message": "Maximum simultaneous motion is 4-axis, not 5-axis.",
+      "guideRefs": [
+        "Machine Kinematics and Axis Usage"
+      ]
+    },
+    {
+      "code": "SOFT_JAW_NOMINAL_INCH_DISTANCE",
+      "category": "fixture",
+      "severity": "warning",
+      "appliesTo": "setup",
+      "type": "conditional_required",
+      "when": {
+        "setup.fixtureType": [
+          "soft_jaw"
+        ]
+      },
+      "field": "setup.softJaw.nominalInchSpacing",
+      "message": "Soft jaws should be held a nominal-inch distance apart.",
+      "guideRefs": [
+        "Setup and Workholding"
+      ]
+    },
+    {
+      "code": "TAB_WEB_THICKNESS_TARGET",
+      "category": "fixture",
+      "severity": "warning",
+      "appliesTo": "operation",
+      "type": "conditional_target_numeric",
+      "when": {
+        "operation.strategyGroup": [
+          "tabbing"
+        ]
+      },
+      "field": "operation.tab.webThicknessMm",
+      "target": 0.25,
+      "message": "Remaining tab/web thickness should target 0.25 mm.",
+      "guideRefs": [
+        "Setup and Workholding"
+      ]
+    },
+    {
+      "code": "SOFT_JAW_POCKET_REQUIRED",
+      "category": "fixture",
+      "severity": "warning",
+      "appliesTo": "setup",
+      "type": "conditional_equals",
+      "when": {
+        "setup.fixtureType": [
+          "soft_jaw"
+        ]
+      },
+      "field": "setup.softJaw.hasPocket",
+      "expected": true,
+      "message": "Soft jaws should have pockets that enclose the part.",
+      "guideRefs": [
+        "Setup and Workholding"
+      ]
+    },
+    {
+      "code": "HP_HOLDER_LIBRARY_ONLY",
+      "category": "tool",
+      "severity": "warning",
+      "appliesTo": "operation",
+      "type": "allowed_values",
+      "field": "operation.tool.holderSource",
+      "allowed": [
+        "hp_cloud_library"
+      ],
+      "message": "Only use tool holders from the HP cloud library.",
+      "guideRefs": [
+        "Tooling and Holders"
+      ]
+    },
+    {
+      "code": "PURCHASED_TOOL_DOC_REQUIRED",
+      "category": "tool",
+      "severity": "warning",
+      "appliesTo": "operation",
+      "type": "conditional_required",
+      "when": {
+        "operation.tool.requiresPurchase": [
+          true
+        ]
+      },
+      "field": "operation.comment",
+      "message": "Document tools needing purchase and number them T999/T998/T997 etc.",
+      "guideRefs": [
+        "Tooling and Holders"
+      ]
+    },
+    {
+      "code": "DRILL_DESCRIPTION_DIAMETER_AND_WORD_DRILL",
+      "category": "tool",
+      "severity": "warning",
+      "appliesTo": "operation",
+      "type": "conditional_regex",
+      "when": {
+        "operation.tool.type": [
+          "Drill"
+        ]
+      },
+      "field": "operation.tool.description",
+      "pattern": "^.*\\bdrill\\b.*$",
+      "message": "Drill descriptions should include diameter and the word 'drill'.",
+      "guideRefs": [
+        "Tooling and Holders"
+      ]
+    },
+    {
+      "code": "SKETCHES_FOR_TOOLPATHS_TOP_LEVEL",
+      "category": "structure",
+      "severity": "warning",
+      "appliesTo": "file",
+      "type": "required",
+      "field": "file.toolpathSketchesTopLevel",
+      "message": "Sketches for toolpaths should be on the top level in the CAM file.",
+      "guideRefs": [
+        "CAD/CAM Modeling and Documentation"
+      ]
+    },
+    {
+      "code": "USE_PARAMETRIC_HEIGHT_SELECTIONS",
+      "category": "strategy",
+      "severity": "info",
+      "appliesTo": "operation",
+      "type": "preferred",
+      "field": "operation.heightSelectionMode",
+      "preferred": "parametric",
+      "message": "Use parametric height selections whenever possible.",
+      "guideRefs": [
+        "CAD/CAM Modeling and Documentation"
+      ]
+    },
+    {
+      "code": "ROUND_SOFT_JAW_FEATURES_WITH_CIRCLE_AND_BORE",
+      "category": "fixture",
+      "severity": "info",
+      "appliesTo": "setup",
+      "type": "conditional_preferred",
+      "when": {
+        "setup.fixtureType": [
+          "soft_jaw"
+        ],
+        "setup.hasRoundJawFeatures": [
+          true
+        ]
+      },
+      "field": "setup.softJaw.roundFeatureMethod",
+      "preferred": [
+        "circle_sketch_and_2d_bore",
+        "circle_sketch_and_2d_contour"
+      ],
+      "message": "Round soft jaw features should use a circle sketch and 2D bore/contour.",
+      "guideRefs": [
+        "CAD/CAM Modeling and Documentation"
+      ]
+    },
+    {
+      "code": "PRESET_FINISH_WALL_REQUIRED",
+      "category": "tool",
+      "severity": "warning",
+      "appliesTo": "operation",
+      "type": "conditional_contains_all",
+      "when": { "operation.name": { "containsAll": ["FINISH", "WALL"] } },
+      "excludeWhen": {
+        "operation.operationType": [
+          "contour3d", "flow", "flow2", "horizontal", "parallel",
+          "pencil", "project", "radial", "scallop", "spiral",
+          "morph", "morphed_spiral", "steep_and_shallow", "blend", "path3d"
+        ]
+      },
+      "field": "operation.tool.preset",
+      "mustContainAll": ["FINISH", "WALL"],
+      "message": "Operations named 'FINISH WALL' must use a preset containing 'FINISH' and 'WALL'."
+    },
+    {
+      "code": "PRESET_3D_SURFACE_FINISH_PROFILING",
+      "category": "tool",
+      "severity": "warning",
+      "appliesTo": "operation",
+      "type": "conditional_contains_all",
+      "when": {
+        "operation.operationType": [
+          "contour3d", "flow", "flow2", "horizontal", "parallel",
+          "pencil", "project", "radial", "scallop", "spiral",
+          "morph", "morphed_spiral", "steep_and_shallow", "blend", "path3d"
+        ]
+      },
+      "field": "operation.tool.preset",
+      "mustContainAll": ["PROFIL"],
+      "message": "3D surface finish operations must use a Profiling preset."
+    },
+    {
+      "code": "PRESET_FINISH_FLOOR_REQUIRED",
+      "category": "tool",
+      "severity": "warning",
+      "appliesTo": "operation",
+      "type": "conditional_contains_all",
+      "when": { "operation.name": { "containsAll": ["FINISH", "FLOOR"] } },
+      "field": "operation.tool.preset",
+      "mustContainAll": ["FINISH", "FLOOR"],
+      "message": "Operations named 'FINISH FLOOR' must use a preset containing 'FINISH' and 'FLOOR'."
+    },
+    {
+      "code": "PRESET_ENGRAVE_REQUIRED",
+      "category": "tool",
+      "severity": "warning",
+      "appliesTo": "operation",
+      "type": "conditional_contains_all",
+      "when": { "operation.name": { "containsAll": ["ENGRAVE"] } },
+      "field": "operation.tool.preset",
+      "mustContainAll": ["ENGRAVE"],
+      "message": "Operations named 'Engrave' must use a preset containing 'ENGRAVE'."
+    },
+    {
+      "code": "PRESET_PROFILING_REQUIRED",
+      "category": "tool",
+      "severity": "warning",
+      "appliesTo": "operation",
+      "type": "conditional_contains_all",
+      "when": { "operation.name": { "containsAll": ["PROFIL"] } },
+      "field": "operation.tool.preset",
+      "mustContainAll": ["PROFIL"],
+      "message": "Operations named 'Profiling'/'Profile' must use a preset containing 'PROFIL'."
+    },
+    {
+      "code": "PRESET_DEBURRING_REQUIRED",
+      "category": "tool",
+      "severity": "warning",
+      "appliesTo": "operation",
+      "type": "conditional_contains_all",
+      "when": { "operation.name": { "containsAll": ["DEBURR"] } },
+      "field": "operation.tool.preset",
+      "mustContainAll": ["DEBURR"],
+      "message": "Operations named 'Deburr'/'Deburring' must use a preset containing 'DEBURR'."
+    },
+    {
+      "code": "PRESET_CHAMFER_REQUIRED",
+      "category": "tool",
+      "severity": "warning",
+      "appliesTo": "operation",
+      "type": "conditional_contains_all",
+      "when": { "operation.name": { "containsAll": ["CHAMFER"] } },
+      "field": "operation.tool.preset",
+      "mustContainAll": ["CHAMFER"],
+      "message": "Operations named 'Chamfer' must use a preset containing 'CHAMFER'."
+    },
+    {
+      "code": "POCKET_CLEARING_NOT_ALLOWED",
+      "category": "operation",
+      "severity": "error",
+      "appliesTo": "operation",
+      "type": "name_contains_fail",
+      "field": "operation.name",
+      "containsAny": ["POCKET CLEARING", "POCKET CLEAR"],
+      "message": "Pocket clearing operations are not permitted."
+    }
+  ]
+}

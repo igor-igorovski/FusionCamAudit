@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CAM Audit</title>
+  <link rel="stylesheet" href="./audit_ui.css" />
+</head>
+<body>
+  <header>
+    <h1 id="app-title">CAM Audit</h1>
+    <div class="header-badges" id="header-badges">
+      <span class="badge preview-badge" id="badge-preview" style="display:none;">Preview Mode</span>
+      <span class="badge" id="badge-version">v0.1 · Phase 4</span>
+    </div>
+  </header>
+
+  <div class="toolbar">
+    <button class="btn-primary" id="btn-run">Refresh Audit</button>
+    <button class="btn-secondary" id="btn-theme">Light mode</button>
+    <button class="btn-secondary" id="btn-toggle-nc" disabled>Show unchecked</button>
+    <button class="btn-secondary" id="btn-toggle-fail" disabled>Show FAIL only</button>
+    <button class="btn-secondary" id="btn-export" disabled>Export JSON</button>
+    <button class="btn-secondary" id="btn-export-md" disabled>Export MD</button>
+  </div>
+
+  <div class="summary-bar" id="summary-bar" style="display:none;">
+    <div class="chip pass" id="chip-pass">✓ <span id="cnt-pass">0</span></div>
+    <div class="chip fail" id="chip-fail">✕ <span id="cnt-fail">0</span></div>
+    <div class="chip warning" id="chip-warning">! <span id="cnt-warning">0</span></div>
+    <div class="chip nc" id="chip-nc">– <span id="cnt-nc">0</span> not checked</div>
+  </div>
+
+  <div class="summary-info" id="summary-info">
+    <div class="inline-status" id="inline-status" aria-live="polite"></div>
+  </div>
+
+  <div class="results" id="results">
+    <div class="state-placeholder" id="placeholder">
+      <div class="icon">&#128269;</div>
+      <p>Audit loads automatically for the active CAM document.</p>
+    </div>
+  </div>
+
+  <script src="./audit_ui.js"></script>
+  <script>
+    window.CamAuditUI.init({
+      mode: 'fusion',
+      title: 'CAM Audit',
+      versionLabel: 'v0.1 · Phase 4'
+    });
+  </script>
+</body>
+</html>

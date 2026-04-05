@@ -1,0 +1,13 @@
+{
+    "autodeskProduct": "Fusion",
+    "type": "addin",
+    "id": "FusionCamAudit",
+    "author": "",
+    "description": {
+        "": "Deterministic CAM audit for Fusion 360 setups and operations."
+    },
+    "version": "0.1.0",
+    "runOnStartup": false,
+    "supportedOS": "windows|mac",
+    "editEnabled": true
+}

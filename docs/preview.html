@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CAM Audit Preview</title>
+  <link rel="stylesheet" href="../palette/audit_ui.css" />
+</head>
+<body>
+  <header>
+    <h1 id="app-title">CAM Audit</h1>
+    <div class="header-badges" id="header-badges">
+      <span class="badge preview-badge" id="badge-preview">Preview Mode</span>
+      <span class="badge" id="badge-version">v0.1 · Mock UI</span>
+    </div>
+  </header>
+
+  <div class="toolbar">
+    <button class="btn-primary" id="btn-run">Refresh Audit</button>
+    <button class="btn-secondary" id="btn-theme">Dark mode</button>
+    <button class="btn-secondary" id="btn-toggle-nc">Show unchecked</button>
+    <button class="btn-secondary" id="btn-toggle-fail">Show FAIL only</button>
+    <button class="btn-secondary" id="btn-export">Export JSON</button>
+    <button class="btn-secondary" id="btn-export-md">Export MD</button>
+  </div>
+
+  <div class="summary-bar" id="summary-bar">
+    <div class="chip pass" id="chip-pass">✓ <span id="cnt-pass">0</span></div>
+    <div class="chip fail" id="chip-fail">✕ <span id="cnt-fail">0</span></div>
+    <div class="chip warning" id="chip-warning">! <span id="cnt-warning">0</span></div>
+    <div class="chip nc" id="chip-nc">– <span id="cnt-nc">0</span> not checked</div>
+  </div>
+
+  <div class="summary-info" id="summary-info">
+    <div class="inline-status" id="inline-status" aria-live="polite"></div>
+  </div>
+
+  <div class="results" id="results"></div>
+
+  <script>
+    window.CAM_AUDIT_PREVIEW_DATA = {
+      summary: { pass: 17, fail: 4, warning: 3, not_checked: 5 },
+      setups: [
+        {
+          name: 'OP1 5AX',
+          checks: [
+            { code: 'SETUP_NAME_FORMAT', status: 'fail', message: 'Setup name must match "Op[op#] [#AX]" or an approved support setup name.' },
+            { code: 'PROGRAM_NUMBER_REQUIRED', status: 'pass', message: 'Program number is present.' },
+            { code: 'PROGRAM_COMMENT_REQUIRED', status: 'warning', message: 'Program comment should describe stock and fixture intent.' },
+            { code: 'MACHINE_MODEL_PRESENT', status: 'pass', message: 'Machine model is assigned.' },
+            { code: 'WORK_OFFSET_REQUIRED', status: 'pass', message: 'Work offset is present.' }
+          ],
+          operations: [
+            {
+              name: 'Face1',
+              operation_id: '101',
+              op_type: 'face',
+              tool: { number: 3, description: 'Ø1/4" flat (.3103 1/4x0.75 3FL)' },
+              checks: [
+                { code: 'TOOL_ASSIGNED', status: 'pass', message: 'Operation has a valid tool.' },
+                { code: 'STEPDOWN_MAX', status: 'warning', message: 'Stepdown is close to the shop limit.' },
+                { code: 'TOOLPATH_VALID', status: 'pass', message: 'Toolpath is up to date.' }
+              ]
+            },
+            {
+              name: 'ROUGH',
+              operation_id: '102',
+              op_type: 'adaptive',
+              tool: { number: 3, description: 'Ø1/4" flat (.3103 1/4x0.75 3FL)' },
+              checks: [
+                { code: 'COOLANT_REQUIRED', status: 'fail', message: 'Coolant must be enabled for this roughing strategy.' },
+                { code: 'TOOLPATH_VALID', status: 'pass', message: 'Toolpath is up to date.' },
+                { code: 'STOCK_TO_LEAVE_DEFINED', status: 'pass', message: 'Stock to leave is configured.' }
+              ]
+            },
+            {
+              name: 'FINISH WALL',
+              operation_id: '103',
+              op_type: 'contour',
+              tool: { number: 3, description: 'Ø1/4" flat (.3103 1/4x0.75 3FL)' },
+              checks: [
+                { code: 'LEAD_IN_REQUIRED', status: 'fail', message: 'Lead-in radius must be defined for finish wall contour.' },
+                { code: 'TOOLPATH_VALID', status: 'warning', message: 'Toolpath should be regenerated after stock update.' },
+                { code: 'MODEL_SELECTION', status: 'not_checked', message: 'Model selection has not been verified in preview mode.' }
+              ]
+            },
+            {
+              name: 'DRILL OP',
+              operation_id: '104',
+              op_type: 'drill',
+              tool: { number: 12, description: 'Ø4.20 drill carbide stub' },
+              checks: [
+                { code: 'PECK_REQUIRED', status: 'pass', message: 'Peck drilling rule passed.' },
+                { code: 'HOLE_GROUP_MATCH', status: 'not_checked', message: 'Hole grouping rule not checked in mock data.' }
+              ]
+            }
+          ]
+        },
+        {
+          name: 'SUPPORT OP2',
+          checks: [
+            { code: 'SETUP_NAME_FORMAT', status: 'pass', message: 'Support setup name is approved.' },
+            { code: 'MACHINE_MODEL_PRESENT', status: 'pass', message: 'Machine model is assigned.' }
+          ],
+          operations: [
+            {
+              name: 'SUPPORT TRIM',
+              operation_id: '201',
+              op_type: 'trace',
+              tool: { number: 7, description: 'Ø1/8" ball (.125 2FL)' },
+              checks: [
+                { code: 'TOOL_ASSIGNED', status: 'pass', message: 'Tool is assigned.' },
+                { code: 'TOOLPATH_VALID', status: 'pass', message: 'Toolpath is up to date.' }
+              ]
+            },
+            {
+              name: 'FINISH WALL 1',
+              operation_id: '202',
+              op_type: 'contour',
+              tool: { number: 2, description: 'Ø1/8" flat (.1102 1/8 x 0.4375 3FL)' },
+              checks: [
+                { code: 'LEAD_OUT_REQUIRED', status: 'fail', message: 'Lead-out must be enabled on the finish contour.' },
+                { code: 'REST_MACHINING', status: 'pass', message: 'Rest machining setting is acceptable.' }
+              ]
+            }
+          ]
+        }
+      ]
+    };
+  </script>
+  <script src="../palette/audit_ui.js"></script>
+  <script>
+    window.CamAuditUI.init({
+      mode: 'preview',
+      title: 'CAM Audit',
+      versionLabel: 'v0.1 · Mock UI',
+      previewBadgeLabel: 'Preview Mode',
+      mockResult: window.CAM_AUDIT_PREVIEW_DATA,
+      previewHintMessage: 'Open this file in VS Code Live Preview or a browser for fast UI iteration.',
+      previewLoadMessage: 'Preview loaded with mock CAM audit data.'
+    });
+  </script>
+</body>
+</html>
