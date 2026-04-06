@@ -244,12 +244,13 @@ button {
 .op-header {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 5px 10px;
+  gap: 6px;
+  padding: 6px 10px;
   background: #222;
   cursor: pointer;
   user-select: none;
   position: relative;
+  min-height: 0;
 }
 
 .op-header:hover { background: #262626; }
@@ -258,7 +259,11 @@ button {
   font-size: 11px;
   font-weight: 600;
   color: #aaa;
-  flex: 1;
+  line-height: 1.1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1 1 auto;
   min-width: 0;
 }
 
@@ -266,9 +271,19 @@ button {
   font-size: 10px;
   color: #666;
   font-family: monospace;
+  line-height: 1;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  flex: 0 1 42%;
+  min-width: 90px;
+  max-width: 42%;
+  margin-left: auto;
+  text-align: right;
+}
+
+.op-tool.empty {
+  color: #555;
 }
 
 .op-stats { display: flex; gap: 4px; }
@@ -276,9 +291,17 @@ button {
 .op-meta {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 7px;
   min-width: 0;
   flex: 1;
+}
+
+.op-type-icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  image-rendering: auto;
+  opacity: 0.96;
 }
 
 .op-actions {
@@ -590,6 +613,10 @@ body[data-theme="light"] .op-name {
 
 body[data-theme="light"] .op-tool {
   color: #8b837b;
+}
+
+body[data-theme="light"] .op-tool.empty {
+  color: #a29a92;
 }
 
 body[data-theme="light"] .op-actions {

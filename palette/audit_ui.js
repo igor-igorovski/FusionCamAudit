@@ -19,6 +19,136 @@
       .replace(/"/g, '&quot;');
   }
 
+  var OPERATION_ICON_FILES = {
+    adaptive_2d:           { ext: 'png' },
+    adaptive_clearing:     { ext: 'png' },
+    advanced_swarf:        { ext: 'svg' },
+    blend:                 { ext: 'svg' },
+    bore:                  { ext: 'png' },
+    chamfer_2d:            { ext: 'png' },
+    circular:              { ext: 'png' },
+    contour_2d:            { ext: 'png' },
+    corner:                { ext: 'png' },
+    deburr:                { ext: 'svg' },
+    drill:                 { ext: 'png' },
+    engrave:               { ext: 'png' },
+    face:                  { ext: 'png' },
+    flat:                  { ext: 'png' },
+    geodesic:              { ext: 'svg' },
+    horizontal:            { ext: 'png' },
+    morph:                 { ext: 'png' },
+    morphed_spiral:        { ext: 'png' },
+    multi_axis_clearing:   { ext: 'svg' },
+    multi_axis_contour:    { ext: 'png' },
+    multi_axis_finishing:  { ext: 'png' },
+    parallel:              { ext: 'png' },
+    pencil:                { ext: 'png' },
+    pocket_2d:             { ext: 'png' },
+    pocket_clearing:       { ext: 'png' },
+    project:               { ext: 'png' },
+    radial:                { ext: 'png' },
+    ramp:                  { ext: 'png' },
+    rotary_contour:        { ext: 'svg' },
+    rotary_parallel:       { ext: 'png' },
+    rotary_pocket:         { ext: 'svg' },
+    scallop:               { ext: 'png' },
+    slot:                  { ext: 'png' },
+    spiral:                { ext: 'png' },
+    steep_and_shallow:     { ext: 'png' },
+    swarf:                 { ext: 'png' },
+    thread:                { ext: 'png' },
+    trace:                 { ext: 'png' }
+  };
+
+  var OPERATION_TYPE_META = {
+    adaptive:              { label: 'Adaptive Clearing', iconKey: 'adaptive_clearing' },
+    adaptive2d:            { label: '2D Adaptive Clearing', iconKey: 'adaptive_2d' },
+    advancedswarf:         { label: 'Advanced Swarf', iconKey: 'advanced_swarf' },
+    blend:                 { label: 'Blend', iconKey: 'blend' },
+    bore:                  { label: 'Bore', iconKey: 'bore' },
+    circular:              { label: 'Circular', iconKey: 'circular' },
+    contour:               { label: 'Contour', iconKey: 'contour_2d' },
+    contour2d:             { label: '2D Contour', iconKey: 'contour_2d' },
+    deburr:                { label: 'Deburr', iconKey: 'deburr' },
+    automaticdeburring:    { label: 'Deburr', iconKey: 'deburr' },
+    automatic_deburring:   { label: 'Deburr', iconKey: 'deburr' },
+    moduleworksautomaticdeburring: { label: 'Deburr', iconKey: 'deburr' },
+    moduleworks_automatic_deburring: { label: 'Deburr', iconKey: 'deburr' },
+    moduleworks_automatic_deburring_derived: { label: 'Deburr', iconKey: 'deburr' },
+    drill:                 { label: 'Drill', iconKey: 'drill' },
+    engrave:               { label: 'Engrave', iconKey: 'engrave' },
+    face:                  { label: 'Face', iconKey: 'face' },
+    flat:                  { label: 'Flat', iconKey: 'flat' },
+    flow:                  { label: 'Flow', iconKey: 'multi_axis_contour' },
+    geodesic:              { label: 'Geodesic', iconKey: 'geodesic' },
+    horizontal:            { label: 'Horizontal', iconKey: 'horizontal' },
+    horizontalnew:         { label: 'Flat', iconKey: 'flat' },
+    horizontal_new:        { label: 'Flat', iconKey: 'flat' },
+    morphedspiral:         { label: 'Morphed Spiral', iconKey: 'morphed_spiral' },
+    morph:                 { label: 'Morph', iconKey: 'morph' },
+    multicaxisclearing:    { label: 'Multi-Axis Clearing', iconKey: 'multi_axis_clearing' },
+    multiaxisclearing:     { label: 'Multi-Axis Clearing', iconKey: 'multi_axis_clearing' },
+    multi_axis_clearing:   { label: 'Multi-Axis Clearing', iconKey: 'multi_axis_clearing' },
+    multicaxiscontour:     { label: 'Multi-Axis Contour', iconKey: 'multi_axis_contour' },
+    multiaxiscontour:      { label: 'Multi-Axis Contour', iconKey: 'multi_axis_contour' },
+    multi_axis_contour:    { label: 'Multi-Axis Contour', iconKey: 'multi_axis_contour' },
+    multicaxisfinishing:   { label: 'Multi-Axis Finishing', iconKey: 'multi_axis_finishing' },
+    multiaxisfinishing:    { label: 'Multi-Axis Finishing', iconKey: 'multi_axis_finishing' },
+    multi_axis_finishing:  { label: 'Multi-Axis Finishing', iconKey: 'multi_axis_finishing' },
+    parallel:              { label: 'Parallel', iconKey: 'parallel' },
+    pencil:                { label: 'Pencil', iconKey: 'pencil' },
+    pocket:                { label: 'Pocket Clearing', iconKey: 'pocket_clearing' },
+    pocket2d:              { label: '2D Pocket', iconKey: 'pocket_2d' },
+    project:               { label: 'Project', iconKey: 'project' },
+    radial:                { label: 'Radial', iconKey: 'radial' },
+    ramp:                  { label: 'Ramp', iconKey: 'ramp' },
+    rotarycontour:         { label: 'Rotary Contour', iconKey: 'rotary_contour' },
+    rotary_contour:        { label: 'Rotary Contour', iconKey: 'rotary_contour' },
+    rotaryparallel:        { label: 'Rotary Parallel', iconKey: 'rotary_parallel' },
+    rotary_parallel:       { label: 'Rotary Parallel', iconKey: 'rotary_parallel' },
+    rotarypocket:          { label: 'Rotary Pocket', iconKey: 'rotary_pocket' },
+    rotary_pocket:         { label: 'Rotary Pocket', iconKey: 'rotary_pocket' },
+    scallop:               { label: 'Scallop', iconKey: 'scallop' },
+    slot:                  { label: 'Slot', iconKey: 'slot' },
+    spiral:                { label: 'Spiral', iconKey: 'spiral' },
+    steepandshallow:       { label: 'Steep And Shallow', iconKey: 'steep_and_shallow' },
+    swarf:                 { label: 'Swarf', iconKey: 'swarf' },
+    thread:                { label: 'Thread', iconKey: 'thread' },
+    path3d:                { label: 'Trace', iconKey: 'trace' },
+    trace:                 { label: 'Trace', iconKey: 'trace' },
+    trace3d:               { label: 'Trace', iconKey: 'trace' },
+    chamfer2d:             { label: '2D Chamfer', iconKey: 'chamfer_2d' }
+  };
+
+  function normalizeOpType(opType) {
+    return String(opType || '').trim().toLowerCase().replace(/[\s-]+/g, '').replace(/[^\w]/g, '');
+  }
+
+  function humanizeOpType(opType) {
+    return String(opType || '')
+      .replace(/([a-z])([A-Z])/g, '$1 $2')
+      .replace(/[_-]+/g, ' ')
+      .replace(/\s+/g, ' ')
+      .replace(/\b\w/g, function (chr) { return chr.toUpperCase(); })
+      .trim();
+  }
+
+  function getOperationMeta(opType) {
+    var normalized = normalizeOpType(opType);
+    return OPERATION_TYPE_META[normalized] || {
+      label: humanizeOpType(opType) || 'Operation',
+      iconKey: 'generic'
+    };
+  }
+
+  function getOperationIconPath(iconKey) {
+    var base = state.mode === 'preview' ? '../palette/resources/op-icons/' : './resources/op-icons/';
+    var key = String(iconKey || 'generic');
+    var meta = OPERATION_ICON_FILES[key] || { ext: 'png' };
+    var suffix = state.theme === 'dark' ? '_dark' : '';
+    return base + key + suffix + '.' + meta.ext;
+  }
+
   function countChecks(checks) {
     var counts = { pass: 0, fail: 0, warning: 0, nc: 0 };
     (checks || []).forEach(function (check) {
@@ -258,6 +388,7 @@
       block.setAttribute('data-has-fail', hasAnyFailInChecks(op.checks || []) ? 'true' : 'false');
 
       var counts = countChecks(op.checks || []);
+      var opMeta = getOperationMeta(op && op.op_type ? op.op_type : '');
       var operationRef = {
         operationId: op && op.operation_id ? op.operation_id : '',
         setupName: setup && setup.name ? setup.name : '',
@@ -269,17 +400,31 @@
       var caret = el('span', 'caret');
       caret.textContent = '\u25b6';
 
+      var iconEl = el('img', 'op-type-icon');
+      iconEl.alt = '';
+      iconEl.src = getOperationIconPath(opMeta.iconKey);
+      iconEl.onerror = function () {
+        if (iconEl.getAttribute('data-fallback') === '1') return;
+        iconEl.setAttribute('data-fallback', '1');
+        iconEl.src = getOperationIconPath('generic');
+      };
+
       var nameEl = el('span', 'op-name');
-      var opTypeLabel = op && op.op_type ? String(op.op_type) : '';
       var opNameLabel = op && op.name ? String(op.name) : '(unnamed)';
-      nameEl.textContent = opTypeLabel ? (opTypeLabel + ' : ' + opNameLabel) : opNameLabel;
+      nameEl.textContent = opMeta.label ? (opMeta.label + ' : ' + opNameLabel) : opNameLabel;
+      nameEl.title = nameEl.textContent;
 
       var toolEl = el('span', 'op-tool');
       if (op.tool && op.tool.description) {
         toolEl.textContent = 'T' + (op.tool.number || '?') + ' ' + op.tool.description;
+        toolEl.title = toolEl.textContent;
+      } else {
+        toolEl.textContent = 'No tool info';
+        toolEl.className += ' empty';
       }
 
       var metaEl = el('div', 'op-meta');
+      metaEl.appendChild(iconEl);
       metaEl.appendChild(nameEl);
       metaEl.appendChild(toolEl);
 

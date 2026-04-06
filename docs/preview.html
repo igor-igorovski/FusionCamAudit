@@ -39,7 +39,7 @@
 
   <script>
     window.CAM_AUDIT_PREVIEW_DATA = {
-      summary: { pass: 17, fail: 4, warning: 3, not_checked: 5 },
+      summary: { pass: 18, fail: 4, warning: 3, not_checked: 6 },
       setups: [
         {
           name: 'OP1 5AX',
@@ -54,8 +54,8 @@
             {
               name: 'Face1',
               operation_id: '101',
-              op_type: 'face',
-              tool: { number: 3, description: 'Ø1/4" flat (.3103 1/4x0.75 3FL)' },
+              op_type: 'horizontal_new',
+              tool: { number: 3, description: '1/4 flat end mill carbide rougher, 3 flute, uncoated, extended reach holder assembly for fixture clearance' },
               checks: [
                 { code: 'TOOL_ASSIGNED', status: 'pass', message: 'Operation has a valid tool.' },
                 { code: 'STEPDOWN_MAX', status: 'warning', message: 'Stepdown is close to the shop limit.' },
@@ -66,7 +66,7 @@
               name: 'ROUGH',
               operation_id: '102',
               op_type: 'adaptive',
-              tool: { number: 3, description: 'Ø1/4" flat (.3103 1/4x0.75 3FL)' },
+              tool: { number: 3, description: '1/4 flat end mill carbide rougher, 3 flute, uncoated, extended reach holder assembly for fixture clearance' },
               checks: [
                 { code: 'COOLANT_REQUIRED', status: 'fail', message: 'Coolant must be enabled for this roughing strategy.' },
                 { code: 'TOOLPATH_VALID', status: 'pass', message: 'Toolpath is up to date.' },
@@ -74,10 +74,10 @@
               ]
             },
             {
-              name: 'FINISH WALL',
+              name: 'OUTER CONTOUR REST',
               operation_id: '103',
-              op_type: 'contour',
-              tool: { number: 3, description: 'Ø1/4" flat (.3103 1/4x0.75 3FL)' },
+              op_type: 'contour2d',
+              tool: { number: 122, description: '5/16 dovetail cutter, 3 flute, uncoated, 5/16 shank x 0.187 LOC, custom holder stackup for radial clearance' },
               checks: [
                 { code: 'LEAD_IN_REQUIRED', status: 'fail', message: 'Lead-in radius must be defined for finish wall contour.' },
                 { code: 'TOOLPATH_VALID', status: 'warning', message: 'Toolpath should be regenerated after stock update.' },
@@ -88,7 +88,7 @@
               name: 'DRILL OP',
               operation_id: '104',
               op_type: 'drill',
-              tool: { number: 12, description: 'Ø4.20 drill carbide stub' },
+              tool: { number: 12, description: '4.20 carbide drill stub length with through-coolant and long gauge holder description for truncation test' },
               checks: [
                 { code: 'PECK_REQUIRED', status: 'pass', message: 'Peck drilling rule passed.' },
                 { code: 'HOLE_GROUP_MATCH', status: 'not_checked', message: 'Hole grouping rule not checked in mock data.' }
@@ -106,21 +106,31 @@
             {
               name: 'SUPPORT TRIM',
               operation_id: '201',
-              op_type: 'trace',
-              tool: { number: 7, description: 'Ø1/8" ball (.125 2FL)' },
+              op_type: 'path3d',
+              tool: { number: 7, description: '1/8 ball end mill, 2 flute, reduced neck, support trimming tool with extra long descriptive metadata' },
               checks: [
                 { code: 'TOOL_ASSIGNED', status: 'pass', message: 'Tool is assigned.' },
                 { code: 'TOOLPATH_VALID', status: 'pass', message: 'Toolpath is up to date.' }
               ]
             },
             {
-              name: 'FINISH WALL 1',
+              name: 'INTERNAL RADII',
               operation_id: '202',
-              op_type: 'contour',
-              tool: { number: 2, description: 'Ø1/8" flat (.1102 1/8 x 0.4375 3FL)' },
+              op_type: 'blend',
+              tool: { number: 2, description: '1/8 ball end mill, finishing blend tool with elongated display string to validate narrow panel truncation' },
               checks: [
                 { code: 'LEAD_OUT_REQUIRED', status: 'fail', message: 'Lead-out must be enabled on the finish contour.' },
                 { code: 'REST_MACHINING', status: 'pass', message: 'Rest machining setting is acceptable.' }
+              ]
+            },
+            {
+              name: 'CUSTOM PASS',
+              operation_id: '203',
+              op_type: 'morph',
+              tool: { number: 22, description: '6 mm lollipop mill with custom strategy label fallback test and long textual tool metadata' },
+              checks: [
+                { code: 'TOOL_ASSIGNED', status: 'pass', message: 'Tool is assigned.' },
+                { code: 'CUSTOM_STRATEGY', status: 'not_checked', message: 'Fallback icon and label are shown for unknown strategy keys.' }
               ]
             }
           ]
